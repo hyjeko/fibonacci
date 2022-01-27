@@ -12,7 +12,7 @@ fn main() {
         io::stdin()
             .read_line(&mut input)
             .expect("Failed to read line");
-        let valid_input: u64 = match input.trim().parse() {
+        let input: u64 = match input.trim().parse() {
             Ok(num) => num,
             Err(error) => {
                 println!("Not a valid u64 integer, {} \n", error);
@@ -20,7 +20,7 @@ fn main() {
             }
         };
         //calculate and print result
-        let result = fibonacci(valid_input);
+        let result = fibonacci(input);
         println!("Your Fibonacci number is: {}", result);
     }
 }
