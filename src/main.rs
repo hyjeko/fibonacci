@@ -5,23 +5,27 @@ fn main() {
     loop {
         //instructions
         println!("---------------------------------------------------");
-        println!("Please Enter a Fibonacci number (u64) to calculate");
+        println!("Please Enter a Fibonacci number to calculate");
         println!("---------------------------------------------------");
         //new mutable string to hold input
         let mut input = String::new();
         io::stdin()
             .read_line(&mut input)
             .expect("Failed to read line");
-        let input: u64 = match input.trim().parse() {
+        let input: u128 = match input.trim().parse() {
             Ok(num) => num,
             Err(error) => {
-                println!("Not a valid u64 integer, {} \n", error);
+                println!("Not a valid u128 integer, {} \n", error);
                 continue;
             }
         };
-        //calculate and print result
-        let result = fibonacci(input);
-        println!("Your Fibonacci number is: {}", result);
+        //calculate and print result using all three methods
+        let result_one = fibonacci(input);
+        let result_two = tuple_fibonacci(input);
+        let result_three = struct_fibonacci(input);
+        assert_eq!(result_one, result_two); // if (a == b && a == c) then b == c
+        assert_eq!(result_one, result_three);
+        println!("Your Fibonacci number is: {}", result_three);
     }
 }
 
@@ -42,7 +46,7 @@ fn main() {
 /**
  * @return Fn
  */
-fn fibonacci(n: u64) -> u64 {
+fn fibonacci(n: u128) -> u128 {
     // first two cases are pre-determined
     if n == 0 || n == 1 {
         return n;
@@ -59,6 +63,51 @@ fn fibonacci(n: u64) -> u64 {
         result = prev_first_number + prev_second_number;
         first_number = prev_second_number;
         second_number = result;
+    }
+
+    return result;
+}
+
+fn tuple_fibonacci(n: u128) -> u128 {
+    if n == 0 || n == 1 {
+        return n;
+    }
+    let mut operands: (u128, u128) = (0, 1);
+    let mut result = 1;
+
+    for _i in 1..n {
+        let prev_operands: (u128, u128) = (operands.0, operands.1);
+        result = prev_operands.0 + prev_operands.1;
+        operands = (prev_operands.1, result);
+    }
+
+    return result;
+}
+
+fn struct_fibonacci(n: u128) -> u128 {
+    if n == 0 || n == 1 {
+        return n;
+    }
+    struct Operands {
+        first_number: u128,
+        second_number: u128,
+    }
+    let mut operands = Operands {
+        first_number: 0,
+        second_number: 1,
+    };
+    let mut result = 1;
+
+    for _i in 1..n {
+        let prev_operands = Operands {
+            first_number: operands.first_number,
+            second_number: operands.second_number,
+        };
+        result = prev_operands.first_number + prev_operands.second_number;
+        operands = Operands {
+            first_number: prev_operands.second_number,
+            second_number: result,
+        }
     }
 
     return result;
