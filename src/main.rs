@@ -5,24 +5,24 @@ fn main() {
     loop {
         //instructions
         println!("---------------------------------------------------");
-        println!("Please Enter a Fibonacci number to calculate");
+        println!("Please Enter a Fibonacci number (u8: 0-255) to calculate");
         println!("---------------------------------------------------");
         //new mutable string to hold input
         let mut input = String::new();
         io::stdin()
             .read_line(&mut input)
             .expect("Failed to read line");
-        let input: u128 = match input.trim().parse() {
+        let input: u8 = match input.trim().parse() {
             Ok(num) => num,
             Err(error) => {
-                println!("Not a valid u128 integer, {} \n", error);
+                println!("Not a valid u8 integer, {} \n", error);
                 continue;
             }
         };
         //calculate and print result using all three methods
-        let result_one = fibonacci(input);
-        let result_two = tuple_fibonacci(input);
-        let result_three = struct_fibonacci(input);
+        let result_one = fibonacci(input.into());
+        let result_two = tuple_fibonacci(input.into());
+        let result_three = struct_fibonacci(input.into());
         assert_eq!(result_one, result_two); // if (a == b && a == c) then b == c
         assert_eq!(result_one, result_three);
         println!("Your Fibonacci number is: {}", result_three);
